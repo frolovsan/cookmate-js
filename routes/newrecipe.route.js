@@ -1,0 +1,52 @@
+const router = require('express').Router();
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'public/images/');
+  },
+  filename(req, file, cb) {
+    cb(null, file.originalname);
+  },
+  fieldname: 'image',
+});
+
+const upload = multer({
+  limits: {
+    fileSize: 1024 * 1024 * 10, // 10 MB
+  },
+  dest: 'public/images/',
+  storage,
+});
+const render = require('../lib/render');
+const newRecipe = require('../views/newRecipe');
+const { Recipe } = require('../db/models');
+
+router.get('/', (req, res) => {
+  render(newRecipe, {}, res, req);
+});
+
+router.post('/add', upload.single('image'), async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const { filename } = req.file;
+    const image = `images/${filename}`;
+    const recipe = await Recipe.create({
+      name,
+      description,
+      image,
+      userId: req.session.userId,
+    });
+    const imagePath = path.join('/uploads', req.file.filename);
+    if (recipe) {
+      res.json({ msg: 'Рецепт добавлен!', imageUrl: imagePath });
+    } else {
+      res.json({ msg: 'Рецепт не добавлен, повторите попытку' });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+module.exports = router;

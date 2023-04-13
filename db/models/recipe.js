@@ -12,6 +12,17 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Favorite,
         foreignKey: 'userId',
       });
+      this.belongsToMany(models.User, {
+        through: models.Comment,
+        foreignKey: 'userId',
+      });
+      this.belongsToMany(models.User, {
+        through: models.Favorite,
+        foreignKey: 'userId',
+      });
+      this.belongsTo(models.User, {
+        foreignKey: 'userId',
+      });
     }
   }
   Recipe.init(
@@ -19,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       image: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,

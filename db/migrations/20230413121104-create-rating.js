@@ -2,34 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Recipes', {
+    await queryInterface.createTable('Ratings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      description: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      image: {
-        allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
         references: {
           model: {
             tableName: 'Users',
           },
           key: 'id',
         },
+        type: Sequelize.INTEGER,
+      },
+      recipeId: {
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Recipes',
+          },
+          key: 'id',
+        },
+        type: Sequelize.INTEGER,
+      },
+      value: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         defaultValue: new Date(),
@@ -44,6 +45,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Recipes');
-  },
+    await queryInterface.dropTable('Ratings');
+  }
 };

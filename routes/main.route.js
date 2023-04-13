@@ -7,14 +7,27 @@ const router = express.Router();
 
 const render = require('../lib/render');
 const Main = require('../views/Main');
+const { Recipe } = require('../db/models');
 
 const configuration = new Configuration({
   apiKey: process.env.OPEN_AI_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-router.get('/', (req, res) => {
-  render(Main, {}, res, req);
+router.get('/', async (req, res) => {
+  const recipes = await Recipe.findAll();
+  const recipesArr = await recipes.map((item) => item.get({ plain: true }));
+  const user = req.session.userId;
+  render(Main, { recipesArr, user }, res, req);
+});
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Recipe.destroy({ where: { id } });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // route.post('/result', async (req, res) => {

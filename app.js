@@ -33,6 +33,7 @@ const mainRoute = require('./routes/main.route');
 const loginRoute = require('./routes/login.route');
 const regRouter = require('./routes/register.route');
 const logoutRoute = require('./routes/logout.route');
+const newRecipeRoute = require('./routes/newrecipe.route');
 
 // вызов функции проверки соединения с базоый данных
 dbCheck();
@@ -47,6 +48,7 @@ app.use('/', mainRoute);
 app.use('/auth/login', loginRoute);
 app.use('/auth/register', regRouter);
 app.use('/auth/logout', logoutRoute);
+app.use('/new', newRecipeRoute);
 
 const PORT = process.env.PORT || 3100;
 app.listen(PORT, (err) => {

@@ -20,11 +20,11 @@ const upload = multer({
   storage,
 });
 const render = require('../lib/render');
-const newRecipe = require('../views/newRecipe');
+const NewRecipe = require('../views/NewRecipe');
 const { Recipe } = require('../db/models');
 
 router.get('/', (req, res) => {
-  render(newRecipe, {}, res, req);
+  render(NewRecipe, {}, res, req);
 });
 
 router.post('/add', upload.single('image'), async (req, res) => {
@@ -38,9 +38,8 @@ router.post('/add', upload.single('image'), async (req, res) => {
       image,
       userId: req.session.userId,
     });
-    const imagePath = path.join('/uploads', req.file.filename);
     if (recipe) {
-      res.json({ msg: 'Рецепт добавлен!', imageUrl: imagePath });
+      res.json({ msg: 'Рецепт добавлен!' });
     } else {
       res.json({ msg: 'Рецепт не добавлен, повторите попытку' });
     }

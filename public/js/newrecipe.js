@@ -1,8 +1,6 @@
 const { newRecForm } = document.forms;
-console.log('Privet 1', newRecForm);
 newRecForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  console.log('PRrivet');
   const data = new FormData(newRecForm);
   const response = await fetch('/new/add', {
     method: 'POST',
